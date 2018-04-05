@@ -2,11 +2,10 @@
 
 namespace Logic;
 
-use Main\Models\Article;
-use Main\Models\Comment;
 use Main\Models\User;
+use Main\Models\Student;
 use Faker\Factory;
-use PHPUnit\Framework\Case;
+use PHPUnit\Framework\TestCase;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -18,7 +17,7 @@ use Slim\Http\Environment;
  * tuned to the specifics of this skeleton app, so if your needs are
  * different, you'll need to change it.
  */
-abstract class BaseCase extends Case
+abstract class BaseCase extends TestCase
 {
 
     /** @var  \Slim\App */
@@ -153,47 +152,6 @@ abstract class BaseCase extends Case
         return User::create(array_merge($attributes, $overrides));
     }
 
-
-    /**
-     * Create a new Article
-     *
-     * @param array $overrides
-     *
-     * @return Article
-     */
-    public function createArticle($overrides = [])
-    {
-        $faker = Factory::create();
-        $attributes = [
-            'title'       => $title = $faker->sentence,
-            'slug'        => str_slug($title),
-            'description' => $faker->paragraph,
-            'body'        => $faker->paragraphs(3, true),
-            'user_id'     => isset($overrides['user_id']) ? $overrides['user_id'] : $this->createUserWithValidToken()->id,
-        ];
-
-        return Article::create(array_merge($attributes, $overrides));
-    }
-
-    /**
-     * Create a new Comment
-     *
-     * @param array $overrides
-     *
-     * @return Comment
-     */
-    public function createComment($overrides = [])
-    {
-        $faker = Factory::create();
-        $attributes = [
-            'body'       => $faker->paragraphs(3, true),
-            'user_id'    => $user_id = isset($overrides['user_id']) ? $overrides['user_id'] : $this->createUserWithValidToken()->id,
-            'article_id' => isset($overrides['article_id']) ? $overrides['article_id'] : $this->createArticle(['user_id' => $user_id])->id,
-        ];
-
-        return Comment::create(array_merge($attributes, $overrides));
-    }
-
     /**
      * Create A User with valid JWT Token
      *
@@ -207,6 +165,64 @@ abstract class BaseCase extends Case
         $this->getValidToken($user);
 
         return $user->fresh();
+    }
+
+    /**
+     * Generate a new JWT token for the given user
+     *
+     * @param \Main\Models\Student $student
+     *
+     * @return mixed please come back to fix this????????????????????????????
+     */
+    // public function getValidToken(Student $student)
+    // {
+    //     $student->update([
+    //         'token' =>
+    //             $token = $this->app->getContainer()->get('auth')->generateToken($student),
+    //     ]);
+
+    //     return $token;
+    // }
+
+    /**
+     * Create a new User
+     *
+     * @param array $overrides
+     *
+     * @return Student
+     */
+    public function createStudent($overrides = [])
+    {
+        $faker = Factory::create();
+        $attributes = [
+            'first_name' => $faker->first_name,
+            'second_name' => $faker->second_name,
+            'last_name' => $faker->last_name,
+            'username' => $faker->userName,
+            'email' => $faker->email,
+            'password' => $password = password_hash($faker->password, PASSWORD_DEFAULT),
+        ];
+        $overrides['password'] = isset($overrides['password']) ? $overrides['password'] : $password;
+
+        return Student::create(array_merge($attributes, $overrides));
+    }
+
+
+
+
+    /**
+     * Create A Student with valid JWT Token
+     *
+     * @param array $overrides
+     *
+     * @return Student
+     */
+    public function createStudentWithValidToken($overrides = [])
+    {
+        $student = $this->createStudent($overrides);
+        $this->getValidToken($student);
+
+        return $student->fresh();
     }
 
     protected function createApplication()

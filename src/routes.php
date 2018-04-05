@@ -1,11 +1,11 @@
 <?php
 
-use Main\Controllers\Article\StudentController;
-use Main\Controllers\Article\CommentController;
-use Main\Controllers\Article\FavoriteController;
+
 use Main\Controllers\Auth\LoginController;
 use Main\Controllers\Auth\RegisterController;
-use Main\Controllers\User\ProfileController;
+use Main\Controllers\Auth\EnrollController;
+use Main\Controllers\ProfileController;
+use Main\Controllers\Admin\AdminController;
 use Main\Controllers\User\UserController;
 use Main\Middleware\OptionalAuth;
 use Main\Models\Tag;
@@ -21,25 +21,25 @@ $app->group('/api',
         /** @var \Slim\App $this */
 
         // Auth Routes
-        $this->post('/admin', RegisterController::class . ':register')->setName('auth.register');
-        $this->post('/admin/login', LoginController::class . ':login')->setName('auth.login');
-
+       // $this->post('/admin', RegisterController::class . ':register')->setName('auth.register');
+        $this->post('/enroll', EnrollController::class . ':enroll')->setName('auth.enroll');
+        $this->post('/login', LoginController::class . ':login')->setName('auth.login');
+       
         // The General Users Routes (Admin, Staff, Student and Parent)
-        $this->get('/admin', UserController::class . ':show')->setName('user.show');
-        $this->get('/allAdmin', UserController::class . ':showAll')->setName('user.showAll');
-        $this->put('/admin', UserController::class . ':update')->setName('user.update');
-
-        // Admin Profile Update Routes
-        $this->get('/profiles/{username}', ProfileController::class . ':showSingle')
-            ->add($optionalAuth)
-            ->setName('profile.showSingle');
-        $this->get('/profiles', ProfileController::class . ':showAll')
-            ->add($optionalAuth)
-            ->setName('profile.showAll');
-
+        $this->get('/admin', AdminController::class . ':showAll')->setName('admin.showAll');
+        $this->get('/allUsers', ProfileController::class . ':showAll')
+                ->add($optionalAuth)  
+                ->setName('admin.showAll');
+        $this->get('/singleUser/{username}', ProfileController::class . ':showSingle')
+                ->add($optionalAuth)        
+                ->setName('admin.showSingle');
+        $this->put('/update/{username}', ProfileController::class . ':update')->setName('update');
+        $this->delete('/deleteUser/{username}', ProfileController::class . ':destroy')->setName('delete');
 
         // Students Routes
-        $this->get('/students/feed', StudentController::class . ':index')->add($optionalAuth)->setName('students.index');
+        $this->post('/student/admission', EnrollController::class . ':admission')
+                ->add($optionalAuth)
+                ->setName('students.admission');
         $this->get('/students/{class}', StudentController::class . ':show')->add($optionalAuth)->setName('students.show');
         $this->put('/students/{class}',
             StudentController::class . ':update')->add($jwtMiddleware)->setName('students.update');
@@ -48,32 +48,7 @@ $app->group('/api',
         $this->post('/students', StudentController::class . ':store')->add($jwtMiddleware)->setName('students.store');
         $this->get('/students', StudentController::class . ':index')->add($optionalAuth)->setName('students.index');
 
-        // Staff Routes
-        // $this->get('/students/{class}/comments',
-        //     CommentController::class . ':index')
-        //     ->add($optionalAuth)
-        //     ->setName('comment.index');
-        // $this->post('/students/{class}/comments',
-        //     CommentController::class . ':store')
-        //     ->add($jwtMiddleware)
-        //     ->setName('comment.store');
-        // $this->delete('/students/{class}/comments/{id}',
-        //     CommentController::class . ':destroy')
-        //     ->add($jwtMiddleware)
-        //     ->setName('comment.destroy');
-
-        // Parents Routes
-        // $this->post('/students/{class}/favorite',
-        //     FavoriteController::class . ':store')
-        //     ->add($jwtMiddleware)
-        //     ->setName('favorite.store');
-
-        // $this->delete('/students/{class}/favorite',
-        //     FavoriteController::class . ':destroy')
-        //     ->add($jwtMiddleware)
-        //     ->setName('favorite.destroy');
-
-        // Tags Route
+       
         $this->get('/tags', function (Request $request, Response $response) {
             return $response->withJson([
                 'tags' => Tag::all('title')->pluck('title'),

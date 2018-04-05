@@ -38,13 +38,13 @@ class UserController
 
     public function show(Request $request, Response $response)
     {
-        if ($user = $this->auth->requestUser($request)) {
+        if ($admin = $this->auth->requestUser($request)) {
             $data = $this->fractal->createData(new Item($user, new UserTransformer()))->toArray();
 
-            return $response->withJson(['user' => $data]);
+            return $response->withJson($admin);
         };
     }
-    
+
 
     public function update(Request $request, Response $response)
     {
@@ -58,24 +58,24 @@ class UserController
             }
 
             $user->update([
-                'email'    => isset($requestParams['email']) ? $requestParams['email'] : $user->email,
-                'username' => isset($requestParams['username']) ? $requestParams['username'] : $user->username,
-                'bio'      => isset($requestParams['bio']) ? $requestParams['bio'] : $user->bio,
-                'image'    => isset($requestParams['image']) ? $requestParams['image'] : $user->image,
-                'moto'      => isset($requestParams['moto']) ? $requestParams['moto'] : $user->moto,
-                'address'      => isset($requestParams['address']) ? $requestParams['address'] : $user->address,
-                'mission'      => isset($requestParams['mission']) ? $requestParams['mission'] : $user->mission,
+                'email'       => isset($requestParams['email']) ? $requestParams['email'] : $user->email,
+                'username'    => isset($requestParams['username']) ? $requestParams['username'] : $user->username,
+                'bio'         => isset($requestParams['bio']) ? $requestParams['bio'] : $user->bio,
+                'image'       => isset($requestParams['image']) ? $requestParams['image'] : $user->image,
+                'moto'        => isset($requestParams['moto']) ? $requestParams['moto'] : $user->moto,
+                'address'     => isset($requestParams['address']) ? $requestParams['address'] : $user->address,
+                'mission'     => isset($requestParams['mission']) ? $requestParams['mission'] : $user->mission,
                 'vision'      => isset($requestParams['vision']) ? $requestParams['vision'] : $user->vision,
-                'about'      => isset($requestParams['about']) ? $requestParams['about'] : $user->about,
-                'phone'      => isset($requestParams['phone']) ? $requestParams['phone'] : $user->phone,
-                'search_term'      => isset($requestParams['search_term']) ? $requestParams['search_term'] : $user->search_term,
-                'password' => isset($requestParams['password']) ? password_hash($requestParams['password'],
+                'about'       => isset($requestParams['about']) ? $requestParams['about'] : $user->about,
+                'phone'       => isset($requestParams['phone']) ? $requestParams['phone'] : $user->phone,
+                'search_term' => isset($requestParams['search_term']) ? $requestParams['search_term'] : $user->search_term,
+                'password'    => isset($requestParams['password']) ? password_hash($requestParams['password'],
                     PASSWORD_DEFAULT) : $user->password,
 
-
+]);
             $data = $this->fractal->createData(new Item($user, new UserTransformer()))->toArray();
 
-            return $response->withJson(['user' => $data]);
+            return $response->withJson($data);
         };
     }
 

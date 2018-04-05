@@ -11,13 +11,15 @@ class CreateStudentTable extends BaseMigration
         //
 
         $this->schema->create('students', function (Blueprint $table) {
-            $table->increments('student_id', 15);
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('middle_name');
-            $table->smallInteger('role');
+            $table->increments('_id')->unique();
+            $table->string('lastname')->unique();
+            $table->string('middlename')->unique();
+            $table->unsignedInteger('student_id');
+            $table->string('firstname');
+            $table->string('email');
+            $table->unsignedInteger('role');
             $table->string('password');
-            $table->text('token');
+            $table->string('token');
             $table->string('class');
             $table->string('class_arm');
             $table->string('last_login');
@@ -52,10 +54,22 @@ class CreateStudentTable extends BaseMigration
             $table->string('sec_con_state');
             $table->string('sec_con_phone1');
             $table->string('sec_con_phone2');
+
+            // $table->foreign('_id')
+            //     ->references('admins_id')->on('admins')
+            //     ->onDelete('cascade');
+            // $table->foreign('firstname')
+            //     ->references('firstname')->on('admins')
+            //     ->onDelete('cascade');
+            // $table->foreign('email')
+            //     ->references('email')->on('admins')
+            //     ->onDelete('cascade');
+            // $table->foreign('role')
+            //     ->references('role')->on('admins')
+            //     ->onDelete('cascade');
+
             $table->timestamps();
-            $table->unique('first_name','last_name', 'middle_name');
-            // primary key('student_id');
-            // key 'name'('last_name', 'first_name', 'middel');
+
         });
     }
     
@@ -63,7 +77,7 @@ class CreateStudentTable extends BaseMigration
     {
         //
 
-        $this->schema->dropIfExists('student');
+        $this->schema->dropIfExists('students');
     }
 
 }

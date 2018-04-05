@@ -13,6 +13,6 @@ $this->factory->define(\Main\Models\User::class, function (\Faker\Generator $fak
             'about'		=> $faker->about,
             'phone'		=> $faker->phone,
             'search_terms'=> $faker->search_terms,
-            'image' => 'https://static.productionready.io/images/smiley-cyrus.jpg',
+            'image' => 'https://aiivon.com.ng/images/images.jpg',
         ];
     });

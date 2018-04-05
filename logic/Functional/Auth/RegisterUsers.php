@@ -21,7 +21,7 @@ class RegisterUsers extends BaseCase
             ],
         ];
 
-        $response = $this->request('POST', '/api/users', $payload);
+        $response = $this->request('POST', '/api/admin', $payload);
         $body = json_decode((string)$response->getBody(), true);
 
         $this->assertEquals(200, $response->getStatusCode(), "Response must return 200 status code");
@@ -40,7 +40,7 @@ class RegisterUsers extends BaseCase
             ],
         ];
 
-        $response = $this->request('POST', '/api/users', $payload);
+        $response = $this->request('POST', '/api/admin', $payload);
 
         $this->assertEquals(422, $response->getStatusCode());
         $errors = json_decode((string)$response->getBody(), true);
@@ -58,7 +58,7 @@ class RegisterUsers extends BaseCase
             ],
         ];
 
-        $response = $this->request('POST', '/api/users', $payload);
+        $response = $this->request('POST', '/api/admin', $payload);
 
         $this->assertEquals(422, $response->getStatusCode());
         $errors = json_decode((string)$response->getBody(), true);

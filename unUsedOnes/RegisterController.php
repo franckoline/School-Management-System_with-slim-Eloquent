@@ -3,7 +3,9 @@
 namespace Main\Controllers\Auth;
 
 use Main\Models\User;
+use Main\Models\Admin;
 use Main\Transformers\UserTransformer;
+use Main\Transformers\AdminTransformer;
 use Interop\Container\ContainerInterface;
 use League\Fractal\Resource\Item;
 use Slim\Http\Request;
@@ -62,22 +64,25 @@ class RegisterController
         return $response->withJson(
             [
                 'user' => $user,
-            ]);
+            ]
+        );
     }
+
 
     /**
      * @param array
      *
-     * @return \Main\Validation\Validator
+     * @return \Conduit\Validation\Validator
      */
     protected function validateRegisterRequest($values)
     {
-        return $this->validator->validateArray($values,
+        return $this->validator->validateArray(
+            $values,
             [
-                'email'    => v::noWhitespace()->notEmpty()->email()->existsInTable($this->db->table('users'), 'email'),
-                'username' => v::noWhitespace()->notEmpty()->existsInTable($this->db->table('users'),
-                    'username'),
+                'email' => v::noWhitespace()->notEmpty()->email()->existsInTable($this->db->table('users'), 'email'),
+                'username' => v::noWhitespace()->notEmpty()->existsInTable($this->db->table('users'), 'username'),
                 'password' => v::noWhitespace()->notEmpty(),
-            ]);
+            ]
+        );
     }
 }

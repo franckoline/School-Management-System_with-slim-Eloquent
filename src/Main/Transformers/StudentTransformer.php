@@ -12,10 +12,11 @@ class StudentTransformer extends TransformerAbstract
     {
         return [
             'id'            => (int)$student->id,
-            'email'         => $student->email,
-            'createdAt'     => optional($student->created_at)->toIso8601String(),
-            'updatedAt'     => optional($student->update_at)->toIso8601String(),
             'username'      => $student->username,
+            'firstname'     => $student->firstname,
+            'token'         => $student->token,
+            'role'          => $student->role,
+            'email'         => $student->email,
             'bio'           => $student->bio,
             'moto'          => $student->moto,
             'address'       => $student->address,
@@ -25,6 +26,8 @@ class StudentTransformer extends TransformerAbstract
             'search_term'   => $student->search_term,
             'image'         => $student->image,
             'token'         => $student->token,
+            'createdAt'     => optional($student->created_at)->toIso8601String(),
+            'updatedAt'     => optional($student->update_at)->toIso8601String(),
 
         ];
     }

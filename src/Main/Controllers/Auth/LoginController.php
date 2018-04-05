@@ -3,14 +3,17 @@
 namespace Main\Controllers\Auth;
 
 use Main\Models\User;
+use Main\Models\Admin;
 use Main\Models\Student;
 use Main\Transformers\UserTransformer;
+use Main\Transformers\AdminTransformer;
 use Main\Transformers\StudentTransformer;
 use Interop\Container\ContainerInterface;
 use League\Fractal\Resource\Item;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Respect\Validation\Validator as v;
+use Main\Controllers\User\UserController;
 
 class LoginController
 {
@@ -47,19 +50,19 @@ class LoginController
      */
     public function login(Request $request, Response $response)
     {
-        $validation = $this->validateLoginRequest($userParams = $request->getParam('user'|| 'student'||'staff'||'parent'));
+        $validation = $this->validateLoginRequest($adminParams = $request->getParam('admin'));
+        
 
         if ($validation->failed()) {
-            return $response->withJson(['errors' => ['email or password' => ['is invalid']]], 422);
+            return $response->withJson(['errors' => [' email or password' => ['is invalid']]], 422);
         }
 
-        if ($user = $this->auth->attempt($userParams['email'], $userParams['password'])) {
-            $user->token = $this->auth->generateToken($user);
-            $data = $this->fractal->createData(new Item($user, new UserTransformer()))->toArray();
+        if ($admin = $this->auth->attemptAdmin($adminParams['email'], $adminParams['password'])) {
+            $admin->token = $this->auth->generateTokenAdmin($admin);
+            $data = $this->fractal->createData(new Item($admin, new AdminTransformer()))->toArray();
 
-            return $response->withJson(['user' => $data]);
-        };
-
+            return $response->withJson(['admin' => $data]);
+        }
         return $response->withJson(['errors' => ['email or password' => ['is invalid']]], 422);
     }
 
@@ -70,10 +73,13 @@ class LoginController
      */
     protected function validateLoginRequest($values)
     {
-        return $this->validator->validateArray($values,
+        return $this->validator->validateArray(
+            $values,
             [
-                'email'    => v::noWhitespace()->notEmpty(),
-                'password' => v::noWhitespace()->notEmpty(),
-            ]);
+                'email'     => v::noWhitespace()->notEmpty(),
+                'password'  => v::noWhitespace()->notEmpty(),
+                'role'      => v::noWhitespace()->notEmpty(),
+            ]
+        );
     }
 }

@@ -38,9 +38,21 @@ class OptionalAuth
     {
         if ($request->hasHeader('HTTP_AUTHORIZATION')) {
             $callable = new DeferredCallable($this->container->get('jwt'), $this->container);
-
             return call_user_func($callable, $request, $response, $next);
+        }elseif ($request->hasHeader('HTTP_AUTHORIZATION')) {
+            $callable= new DeferredCallable($this->container->get('jwt'), $this->container);
+            return call_student_func($callabe, $request, $response, $next);
+        }elseif ($request->hasHeader('HTTP_AUTHORIZATION')) {
+            $callable = new DeferredCallable($this->container->get('jwt'), $this->container);
+            return call_admin_func($callabe, $request, $response, $next);
+        }elseif ($request->hasHeader('HTTP_AUTHORIZATION')) {
+            $callable = new DeferredCallable($this->container->get('jwt'), $this->container);
+            return call_parent_func($callabe, $request, $response, $next);
+        } elseif ($request->hasHeader('HTTP_AUTHORIZATION')) {
+            $callable = new DeferredCallable($this->container->get('jwt'), $this->container);
+            return call_staff_func($callabe, $request, $response, $next);
         }
+        
 
         return $next($request, $response);
     }

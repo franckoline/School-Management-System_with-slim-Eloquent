@@ -4,13 +4,11 @@
     "keywords": ["realworld", "example", "jwt", "authentication", "crud"],
     "homepage": "https://github.com/alhoqbani/slim-php-realworld-example-app",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Olatunbosun Adeniyi",
-            "email": "olatunbosun.p.adeniyi@gmail.com",
-            "homepage": "https://github.com/franckoline/"
-        }
-    ],
+    "authors": [{
+        "name": "Olatunbosun Adeniyi",
+        "email": "olatunbosun.p.adeniyi@gmail.com",
+        "homepage": "https://github.com/franckoline/"
+    }],
     "require": {
         "php": ">=7.0",
         "slim/slim": "^3.9",
@@ -28,9 +26,9 @@
         "phpunit/phpunit": "^6.4"
     },
     "autoload": {
-      "psr-4": {
-          "Main\\": "src/Main"
-      }
+        "psr-4": {
+            "Main\\": "src/Main/"
+        }
     },
     "autoload-dev": {
         "classmap": ["database/"],
@@ -39,7 +37,7 @@
         }
     },
     "config": {
-        "process-timeout" : 0,
+        "process-timeout": 0,
         "php": "5.6"
     },
     "scripts": {

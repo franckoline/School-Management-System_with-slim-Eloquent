@@ -6,7 +6,7 @@
 use Main\Models\User;
 use Main\Models\Student;
 use Main\Models\Staff;
-use Main\Models\Parent;
+use Main\Models\Admin;
 
 
 class DataSeeder extends BaseSeeder

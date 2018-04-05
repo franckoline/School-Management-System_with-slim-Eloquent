@@ -25,7 +25,7 @@ class Login extends BaseCase
         ];
 
         $response = $this->request('POST',
-            '/api/users/login',
+            '/api/admin/login',
             $payload
 
         );
